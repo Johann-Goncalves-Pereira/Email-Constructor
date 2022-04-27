@@ -23,8 +23,9 @@ module.exports = {
     },
     "postcss-pseudo-class-enter": {},
     "postcss-utilities": {},
-    tailwindcss: {},
+    // "posthtml-inline-css": {},
     "rucksack-css": {},
+    tailwindcss: {},
   },
 };
 

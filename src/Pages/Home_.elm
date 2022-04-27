@@ -3,14 +3,14 @@ module Pages.Home_ exposing (Model, Msg, page)
 import Components.Svg as SVG exposing (Logo(..))
 import Gen.Params.Home_ exposing (Params)
 import Gen.Route as Route
-import Html exposing (Html, a, div, h1, h2, h5, p, section, text)
-import Html.Attributes exposing (alt, attribute, class, href, id, rel, src, style, tabindex, target)
+import Html exposing (Attribute, Html, a, div, em, h1, h2, h5, img, p, section, table, tbody, td, text, tfoot, th, thead, tr)
+import Html.Attributes exposing (align, alt, attribute, class, href, id, rel, src, style, tabindex, target)
 import Html.Attributes.Aria exposing (ariaLabel, ariaLabelledby)
 import Page
 import Request
 import Shared
 import Svg exposing (desc)
-import UI exposing (pageConfig)
+import Svg.Attributes exposing (height)
 import View exposing (View, placeholder)
 
 
@@ -55,60 +55,219 @@ update msg model =
 -- VIEW
 
 
+valign : String -> Attribute msg
+valign attr =
+    attribute "valign" attr
+
+
+colspan : Int -> Attribute msg
+colspan attr =
+    attribute "colspan" <| String.fromInt attr
+
+
 view : Model -> View Msg
 view model =
     { title = "Revex - Home"
-    , body =
-        UI.layout
-            { pageConfig
-                | route = Route.Home_
-                , mainAttrs = [ class "flex flex-col gap-8 justify-center items-center" ]
-                , mainContent = viewPlaceholder
-            }
+    , body = [ viewPage model ]
     }
 
 
-viewPlaceholder : List (Html msg)
-viewPlaceholder =
-    [ h1
-        [ class "text-center text-2xl"
-        , id "placeholder"
-        ]
-        [ a
-            [ class "logo-ctnr__title bg-surface-2 px-7 py-3 rounded-xl gap-2"
-            , href "https://github.com/Johann-Goncalves-Pereira/Revex"
-            , target "_blank"
-            , rel "noopener noreferrer"
-            , tabindex 1
-            , ariaLabel "This template project, to start with all the tools you need faster."
-            ]
-            [ SVG.logo SVG.Revex, text "Revex" ]
-        ]
-    , section [ class "bg-surface-2 p-4 rounded-xl w-[min(70rem,100vw-4rem)] mb-8 md:p-8", ariaLabelledby "placeholder" ]
-        [ div [ class "logo-ctnr flex flex-wrap items-center justify-center mb-8 gap-4 md:gap-8" ] <|
-            List.map
-                (\{ svg, link, desc, name } ->
-                    a
-                        [ class "logo-ctnr__link grid grid-rows-[auto,max-content] gap-4 h-24 w-16 md:w-24 md:h-28"
-                        , href link
-                        , ariaLabel desc
-                        , target "_blank"
-                        , rel "noopener noreferrer"
-                        , tabindex 2
+viewPage : Model -> Html Msg
+viewPage model =
+    table [ align "center", class "main-table" ]
+        [ thead []
+            [ tr []
+                [ th [ class "logo", align "center" ]
+                    [ a [ href "#" ]
+                        [ img [ alt "Materialize Logo", src "https://app.materialize.pro/images/logo-materialize-horizontal.svg" ]
+                            []
                         ]
-                        [ svg, h5 [ class "text-xs opacity-75" ] [ text name ] ]
-                )
-                [ { svg = SVG.logo SVG.Elm, link = "https://elm-lang.org", desc = "A delightful language for reliable web applications.", name = "Elm" }
-                , { svg = SVG.logo SVG.ElmSpa, link = "https://www.elm-spa.dev", desc = "Automatically generated a single page application for elm.", name = "Elm Spa" }
-                , { svg = SVG.logo SVG.PostCss, link = "https://postcss.org", desc = "A tool for transforming CSS with JavaScript.", name = "PostCss" }
-                , { svg = SVG.logo SVG.Tailwind, link = "https://tailwindcss.com", desc = "Rapidly build modern websites without ever leaving your HTML.", name = "Tailwind" }
-                , { svg = SVG.logo SVG.OpenProps, link = "https://open-props.style", desc = "Supercharged CSS variables.", name = "Open Props" }
-                , { svg = SVG.logo SVG.Sass, link = "https://sass-lang.com", desc = "Sass is a preprocessor scripting language that is interpreted or compiled into Cascading Style Sheets.", name = "Sass" }
-                , { svg = SVG.logo SVG.Vite, link = "https://vitejs.dev", desc = "Next Generation Frontend Tooling. Base of this project.", name = "Vite" }
-                , { svg = SVG.logo SVG.EsBuild, link = "https://esbuild.github.io", desc = "An extremely fast JavaScript bundler.", name = "EsBuild" }
-                , { svg = SVG.logo SVG.EditorConfig, link = "https://editorconfig.org", desc = "EditorConfig helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.", name = "EditorConfig" }
-                , { svg = SVG.logo SVG.TypeScript, link = "https://www.typescriptlang.org", desc = "TypeScript is JavaScript with syntax for types.", name = "Typescript" }
+                    ]
                 ]
-        , h2 [ class "text-center opacity-60 text-xs" ] [ text "Start a Project with these features integrated" ]
+            ]
+        , tbody []
+            [ tr []
+                [ td [ class "subtitle", align "center" ]
+                    [ text "Olá "
+                    , em [] [ text "(nome do cliente)" ]
+                    , text ", segue seu resumo diário da Materialize."
+                    ]
+                ]
+            , tr []
+                [ viewTableGrey
+                ]
+            ]
+        , tfoot [ class "main-tfoot" ]
+            [ tr [] [ td [] [ text "Abraços," ] ]
+            , tr [] [ td [ class "td--materialize" ] [ text "Time Materialize" ] ]
+            ]
         ]
-    ]
+
+
+viewTableGrey : Html Msg
+viewTableGrey =
+    td [ align "center", class "container-grey" ]
+        [ table [ class "container-grey__table" ]
+            [ thead []
+                [ tr []
+                    [ th []
+                        [ table []
+                            [ thead []
+                                [ tr [ class "thead" ]
+                                    [ th []
+                                        [ text "Sala:" ]
+                                    , th [ class "thead--big" ]
+                                        [ text "Nome da sala" ]
+                                    , th [ class "thead--space" ]
+                                        []
+                                    , th []
+                                        [ text "Total do período:" ]
+                                    , th [ class "thead--big" ]
+                                        [ text "6h18min" ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            , tbody []
+                [ viewTableDark
+                , viewTableDark
+                ]
+            ]
+        ]
+
+
+viewTableDark : Html Msg
+viewTableDark =
+    tr []
+        [ td [ class "container-dark", align "center", colspan 5 ]
+            [ table [ class "container-dark__table" ]
+                [ thead []
+                    [ tr [ class "tr-table" ]
+                        [ th [ align "left" ]
+                            [ text "Resumo de ontem: "
+                            , em []
+                                [ text "03/01/2022" ]
+                            ]
+                        ]
+                    ]
+                , tbody []
+                    [ tr []
+                        [ viewTableGrid
+                        ]
+                    ]
+                ]
+            ]
+        ]
+
+
+viewTableGrid : Html Msg
+viewTableGrid =
+    let
+        spaceImage =
+            "56px"
+    in
+    td [ class "container-grid" ]
+        [ table [ class "container-grid__table" ]
+            [ thead [ class "container-grid__header" ]
+                [ tr []
+                    [ th [ attribute "width" spaceImage ]
+                        []
+                    , th [ align "left" ]
+                        [ text "ESPECIALISTA" ]
+                    , th [ align "center" ]
+                        [ text "PERÍODOS RESERVADOS" ]
+                    , th [ align "center" ]
+                        [ text "PERMANÊNCIA NA SALA" ]
+                    , th [ align "center" ]
+                        [ text "TOTAL DE HORAS REALIZADAS" ]
+                    ]
+                ]
+            , tbody [ class "container-grid__body" ] <|
+                viewInfoRow spaceImage
+            ]
+        ]
+
+
+viewInfoRow : String -> List (Html Msg)
+viewInfoRow h =
+    List.map
+        (\{ image, name, special, timeStart, timeEnd, timeTotal } ->
+            [ tr []
+                [ td [ align "center", colspan 2 ]
+                    [ table [ class "user", align "left" ]
+                        [ tr []
+                            [ td
+                                [ class "user__photo"
+                                , attribute "rowspan" "2"
+                                , attribute "style" <| String.concat [ "width:", h ]
+                                ]
+                                [ img [ alt "Photo Specialist", src image, attribute "height" h ]
+                                    []
+                                ]
+                            , td [ align "left", class "user__name" ]
+                                [ text name ]
+                            ]
+                        , tr []
+                            [ td [ align "left", class "user__type" ]
+                                [ text special ]
+                            ]
+                        ]
+                    ]
+                , td [ align "center", valign "middle" ]
+                    [ table []
+                        [ tr []
+                            [ td [ align "center" ]
+                                [ text timeStart ]
+                            ]
+                        , tr []
+                            [ td [ align "center", class "space-top" ]
+                                [ text timeEnd ]
+                            ]
+                        ]
+                    ]
+                , td [ align "center", valign "middle" ]
+                    [ table []
+                        [ tr []
+                            [ td [ align "center" ]
+                                [ text timeStart ]
+                            ]
+                        , tr []
+                            [ td [ align "center", class "space-top" ]
+                                [ text timeEnd ]
+                            ]
+                        ]
+                    ]
+                , td [ align "center", class "td--materialize", valign "middle" ]
+                    [ text timeTotal ]
+                ]
+            , tr []
+                [ td [ class "line", colspan 5 ]
+                    []
+                ]
+            ]
+        )
+        [ { image = "https://picsum.photos/200/300"
+          , name = "Vanessa Freire"
+          , special = "(Product Owner)"
+          , timeStart = "09:00 - 11:00"
+          , timeEnd = "11:00 - 13:00"
+          , timeTotal = "3h:18min"
+          }
+        , { image = "https://picsum.photos/300/700"
+          , name = "Maycon Sandos de Oliveira"
+          , special = "Designer and Producer"
+          , timeStart = "09:00 - 11:00"
+          , timeEnd = "11:00 - 13:00"
+          , timeTotal = "3h:18min"
+          }
+        , { image = "https://picsum.photos/700/400"
+          , name = "Raphael Derosso Pereira"
+          , special = "Software Engineer"
+          , timeStart = "09:00 - 11:00"
+          , timeEnd = "11:00 - 13:00"
+          , timeTotal = "3h:18min"
+          }
+        ]
+        |> List.concat
